@@ -22,7 +22,7 @@ export default new Vuex.Store({
     mutations: {
         ADD_CART_LOCAL: (state, product) => {
             state.cartProducts.push(product)
-            localStorage.setItem('iki-cart', JSON.stringify(state.cartProducts))
+            localStorage.setItem('user-cart', JSON.stringify(state.cartProducts))
         },
 
         ADD_LOGGED_USER: (state, user) => {

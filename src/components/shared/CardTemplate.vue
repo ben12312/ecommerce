@@ -3,33 +3,36 @@
     <div class="card mb-4 shadow-sm">
       <img
         class="card-img-top mt-2"
-        v-bind:src="item.productImage"
+        v-bind:src="item.picture"
         alt="Card image cap"
-        style="max-height: 700px; max-width: 127.135px; margin: auto"
+        style="max-height: 320px; max-width: 230px; margin: auto"
       />
       <div class="card-body">
-        <h6 class="card-text">{{ item.productName }}.</h6>
-        <p class="card-text">{{ item.productDescription }}.</p>
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="btn-group">
+        <h6 class="card-text">{{ item.product_name }}</h6>
+        <hr style="margin-top: -50px;">
+        <p style="text-align: justify; font-size: 12px; color: grey; margin-top: -10px;">
+          <strong>Kategori: {{ item.category }}</strong>
+        </p>
+        <p style="text-align: justify; font-size: small; margin-top: -12px;" class="card-text"
+          ><strong>Deskripsi: </strong>
+          {{ (item.description && item.description.length > 53) ? `${item.description.slice(0,53)}...` : item.description }}
+        </p>
+
+        <div class="d-flex justify-content-between align-items-center" style="position: absolute; bottom: 0;">
+          <div class="btn-group" style="margin-bottom: 10px;">
             <button
               type="button"
               class="btn btn-sm btn-outline-secondary"
               v-on:click="navigateProductDetail(item)"
-            >
-              View
-            </button>
-
+            >View</button>
+            <!-- v-if="loggedUser && loggedUser.isAdmin" -->
             <button
               type="button"
               class="btn btn-sm btn-outline-secondary"
-              v-on:click="updateEditProduct(item, item._id)"
-              v-if="loggedUser && loggedUser.isAdmin"
-            >
-              Edit
-            </button>
+              v-on:click="updateEditProduct(item, item.id)"
+            >Edit</button>
           </div>
-          <small class="text-muted footerIcons">
+          <small class="text-muted footerIcons" style="margin-bottom: 10px; margin-left: 75px;">
             <a href="javascript:;;" class="p-2">
               <i class="fa fa-heart"></i>
             </a>
@@ -62,7 +65,7 @@ export default {
     navigateProductDetail(product) {
       this.$router.push({
         name: "productDetails",
-        params: { id: product._id },
+        params: { id: product.id },
       });
     },
 

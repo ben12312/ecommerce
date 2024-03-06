@@ -1,66 +1,76 @@
 <template>
     <div class="productForm">
         <form id="productCU" @submit="actionProduct" v-if="!loading">
-                <p v-if="errors.length">
-                  <b>Please correct the following error(s):</b>
-                  <ul>
-                    <li v-for="error in errors" :key="error">{{ error }}</li>
-                  </ul>
-                </p>
+          <p v-if="errors.length">
+            <b>Please correct the following error(s):</b>
+            <ul>
+              <li v-for="error in errors" :key="error">{{ error }}</li>
+            </ul>
+          </p>
 
+          <div class="form-group">
+            <label for="productName">Nama Produk</label>
+            <input type="text" class="form-control" id="productName" v-model="product.product_name" name="productName" aria-describedby="emailHelp" placeholder="Enter Product Name">
+            <small id="emailHelp" class="form-text text-muted">Kami tidak akan mempublikasikan email anda kepihak manapun</small>
+          </div>
+          <div class="row">
+            <div class="col">
               <div class="form-group">
-                <label for="productName">Product Name</label>
-                <input type="text" class="form-control" id="productName" v-model="product.productName" name="productName" aria-describedby="emailHelp" placeholder="Enter Product Name">
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                <label for="isBestProduct">Penjual</label>
+                <input type="text" class="form-control" id="isBestProduct" name="isBestProduct" v-model="product.officeName">
               </div>
+            </div>
+            <div class="col">
               <div class="form-group">
-                <label for="productCategory">Product Category</label>
-                <select class="form-control"  v-if="product.productCategory !== 'Create New'" id="productCategory" name="productCategory" v-model="product.productCategory">
-                    <option 
-                      v-for="(category, index) in categories" :key="index" 
+                <label for="productCategory">Kategori Produk</label>
+                <select class="form-control" v-if="product.category !== 'Create New'" id="productCategory" name="productCategory" v-model="product.category">
+                    <option v-for="(category, index) in categories" :key="index" 
                       v-bind:value="category.productCategory" 
                       >{{category.productCategory}}
                     </option>
                 </select>
-                <input type="password" class="form-control" id="productCategroyDummy"  v-if="product.productCategory === 'Create New'" placeholder="Password" name="productCategroyDummy" v-model="product.productCategroyDummy">
+                <input type="password" class="form-control" id="productCategroyDummy"  v-if="product.category === 'Create New'" placeholder="Password" name="productCategroyDummy" v-model="product.category">
               </div>
+            </div>
+          </div>
+
+          <!-- <div class="form-group">
+            <label for="productSeller">Product Seller</label>
+            <select class="form-control"  v-if="product.officeName !== 'Create New'" id="productSeller" name="productSeller" v-model="product.officeName">
+                <option 
+                  v-for="(seller, index) in sellers" :key="index" 
+                  v-bind:value="seller.productSeller" 
+                  >{{seller.productSeller}}
+                </option>
+            </select>
+            <input type="password" class="form-control" id="productSellerDummy"  v-if="product.productSeller === 'Create New'" placeholder="Password" name="productSellerDummy" v-model="product.productSellerDummy">
+          </div> -->
+          <div class="row">
+            <div class="col">
               <div class="form-group">
-                <label for="productSeller">Product Seller</label>
-                <select class="form-control"  v-if="product.productSeller !== 'Create New'" id="productSeller" name="productSeller" v-model="product.productSeller">
-                    <option 
-                      v-for="(seller, index) in sellers" :key="index" 
-                      v-bind:value="seller.productSeller" 
-                      >{{seller.productSeller}}
-                    </option>
-                </select>
-                <input type="password" class="form-control" id="productSellerDummy"  v-if="product.productSeller === 'Create New'" placeholder="Password" name="productSellerDummy" v-model="product.productSellerDummy">
+                <label for="isBestProduct">Harga(satuan)</label>
+                <input type="text" class="form-control" id="isBestProduct" name="isBestProduct" v-model="product.price" placeholder="Stock">
               </div>
-              <div class="row">
-                <div class="col">
-                  <div class="form-group">
-                    <label for="isBestProduct">Best Product</label>
-                    <input type="checkbox" class="form-control" id="isBestProduct" name="isBestProduct" v-model="product.isBestProduct" placeholder="Password">
-                  </div>
+            </div>
+            <div class="col">
+                <div class="form-group">
+                  <label for="isTopProduct">Status</label>
+                  <input type="text" class="form-control" id="isTopProduct" name="isTopProduct" placeholder="Password" v-model="product.status">
                 </div>
-                <div class="col">
-                    <div class="form-group">
-                      <label for="isTopProduct">Top Product</label>
-                      <input type="checkbox" class="form-control" id="isTopProduct" name="isTopProduct" placeholder="Password" v-model="product.isTopProduct">
-                    </div>
-                </div>
-                <div class="col">
-                  <div class="form-group">
-                    <label for="productRating">Product Rating</label>
-                    <input type="password" class="form-control" id="productRating" placeholder="Password">
-                  </div>
-                </div>
-              </div>
+            </div>
+            <div class="col">
               <div class="form-group">
-                <label for="productImage">Product Image</label>
-                <input type="text" class="form-control" id="productImage" v-model="product.productImage" placeholder="Product Image URL">
+                <label for="productRating">Stock</label>
+                <input type="number" class="form-control" id="productRating" placeholder="Password" v-model="product.stock">
               </div>
-              <br>
-              <button type="submit" class="btn buttonGreen">Save changes</button>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="productImage">Gambar Produk</label>
+            <input type="text" class="form-control" id="productImage" v-model="product.picture" placeholder="Product Image URL">
+          </div>
+          <br>
+          <button type="submit" class="btn buttonGreen">Save changes</button>
         </form>
 
         <div class="lds-dual-ring" v-if="loading"></div>
@@ -68,8 +78,8 @@
 </template>
 <script>
 import axios from "axios";
-import { errorToaster } from "../../shared/service/ErrorHandler.js";
-import _ from "lodash";
+import { successToaster } from "../../shared/service/ErrorHandler.js";
+// import _ from "lodash";
 export default {
   name: "productForm",
   props: ["product"],
@@ -84,43 +94,52 @@ export default {
     };
   },
   methods: {
-    actionProduct(event) {
+    async actionProduct(event) {
       event.preventDefault();
       this.$emit("submit-form", this.product);
+      let editData = {}
+      editData = this.product
+      let resEdit = await axios.put(`${process.env.VUE_APP_BASE_URL}/product/edit`, editData);
+      if (resEdit.status == 200) successToaster('success',resEdit.data.messages)
     },
   },
   created() {
-    this.loading = true;
-    axios
-      .get(`${process.env.VUE_APP_BASE_URL}/products`)
-      .then((response) => {
-        // getting all products and getting the uniq value for
-        // productCategory and returning the productCategory property only
-        this.categories = _.uniqBy(
-          _.map(response.data, function (object) {
-            return _.pick(object, ["productCategory"]);
-          }),
-          "productCategory"
-        );
-        this.categories.push({ productCategory: "Create New" });
+    this.categories = [
+      {
+        id: 1,
+        productCategory: "automotive"
+      }
+    ]
+    // this.loading = true;
+    // axios.get(`${process.env.VUE_APP_BASE_URL}/products`)
+    //   .then((response) => {
+    //     // getting all products and getting the uniq value for
+    //     // productCategory and returning the productCategory property only
+    //     this.categories = _.uniqBy(
+    //       _.map(response.data, function (object) {
+    //         return _.pick(object, ["productCategory"]);
+    //       }),
+    //       "productCategory"
+    //     );
+    //     this.categories.push({ productCategory: "Create New" });
 
-        // getting all products and getting the uniq value for
-        // productSeller and returning the productSeller property only
-        this.sellers = _.uniqBy(
-          _.map(response.data, function (object) {
-            return _.pick(object, ["productSeller"]);
-          }),
-          "productSeller"
-        );
+    //     // getting all products and getting the uniq value for
+    //     // productSeller and returning the productSeller property only
+    //     this.sellers = _.uniqBy(
+    //       _.map(response.data, function (object) {
+    //         return _.pick(object, ["productSeller"]);
+    //       }),
+    //       "productSeller"
+    //     );
 
-        this.sellers.push({ productSeller: "Create New" });
+    //     this.sellers.push({ productSeller: "Create New" });
 
-        this.loading = false;
-      })
-      .catch((error) => {
-        console.log(error);
-        errorToaster("Error while fetching products", "");
-      });
+    //     this.loading = false;
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     errorToaster("Error while fetching products", "");
+    //   });
   },
 };
 </script>

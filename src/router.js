@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import {
-    isLoggedIn
-} from './components/shared/service/authService'
+import { isLoggedIn,getLoggedInUser } from './components/shared/service/authService'
 
 Vue.use(Router)
 
@@ -27,6 +25,24 @@ export default new Router({
         path: '/products',
         name: 'products',
         component: () => import('./views/Products.vue')
+    },
+    {
+        path: '/office',
+        name: 'office',
+        component: () => import('./views/MyOffice.vue'),
+        beforeEnter: (to, from, next) => {
+            let loginData = getLoggedInUser();
+            if (loginData && loginData.seller_permission && (loginData.role == 'Seller' || loginData.role == 'Admin')) {
+                next()
+            } else {
+                next({
+                    name: 'home',
+                    query: {
+                        from: to.name
+                    }
+                })
+            }
+        }
     },
     {
         path: '/products/:id',

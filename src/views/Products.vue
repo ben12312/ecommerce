@@ -36,7 +36,7 @@ export default {
     getAllProducts: function() {
       this.loading = true;
       axios
-        .get(`${process.env.VUE_APP_BASE_URL}/products`)
+        .get(`${process.env.VUE_APP_BASE_URL}/product/get`)
         .then((response) => {
           this.loading = false;
           this.products_list = response.data;

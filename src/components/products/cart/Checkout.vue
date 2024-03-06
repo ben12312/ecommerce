@@ -10,51 +10,66 @@
                   </ul>
           </p>-->
           <div class="form-group">
-            <label for="productName">Address 1</label>
+            <label for="productName">Alamat pengambilan barang</label>
             <input
               type="text"
               class="form-control"
               id="productName"
               name="productName"
               aria-describedby="emailHelp"
-              placeholder="Enter Address"
+              placeholder="Alamat pengambilan barang"
             />
           </div>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="productCategory">Address 2</label>
             <input
-              type="password"
+              type="text"
               class="form-control"
               id="productCategroyDummy"
-              placeholder="Password"
+              placeholder=""
               name="productCategroyDummy"
             />
-          </div>
+          </div> -->
           <div class="form-group">
-            <label for="productSeller">Country</label>
+            <label for="productSeller">Waktu pengambilan</label>
             <input
-              type="password"
+              type="datetime-local"
               class="form-control"
               id="productSellerDummy"
-              placeholder="Password"
+              placeholder="Waktu Pengambilan"
               name="productSellerDummy"
             />
+            <label style="font-size: 12px; color: red;">Harap datang sesuai waktu pengambilan</label>
           </div>
           <div class="row">
             <div class="col">
               <div class="form-group">
-                <label for="productRating">Zip code</label>
+                <label for="productRating">Status</label>
                 <input
-                  type="password"
+                  type="text"
                   class="form-control"
                   id="productRating"
-                  placeholder="Password"
+                  placeholder="Status"
                 />
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label for="productRating">Payment</label>
+                <input
+                  type="file"
+                  class="form-control"
+                  id="productRating"
+                  placeholder="Status"
+                  accept="image/*,.pdf"
+                  @change="onFilePicked"
+                />
+                <label style="font-size: 12px; color: red;">Upload gambar/screen shoot bila diperlukan</label>
               </div>
             </div>
           </div>
           <small id="emailHelp" class="form-text text-muted"
-            >We'll never share your data with anyone else.</small
+            >Note: Data anda aman dan tidak akan disebarluaskan.</small
           >
           <br />
         </form>
@@ -63,7 +78,7 @@
         <cart-calculator ref="cartCalculator"></cart-calculator>
         <ul class="list-group mb-3">
           <router-link to="/products" class="btn btn-primary mt-2 text-white"
-            >Continue Shipping</router-link
+            >Continue Shopping</router-link
           >
           <a
             href="javascript:;;"
@@ -94,10 +109,21 @@ export default {
         userId: "",
         totalPrice: "",
       },
+      image: null
     };
   },
   methods: {
     createShippingDetail() {},
+    onFilePicked (event) {
+      const files = event.target.files
+      // let filename = files[0].name
+      const fileReader = new FileReader()
+      fileReader.addEventListener('load', () => {
+        this.imageUrl = fileReader.result
+      })
+      fileReader.readAsDataURL(files[0])
+      this.image = files[0]
+    }
   },
 };
 </script>

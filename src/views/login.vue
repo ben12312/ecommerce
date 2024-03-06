@@ -41,13 +41,8 @@
           </button>
         </form>
         <p class="mt-3 text-muted">
-          <span v-if="isSignUp">
-            Already a member?
-            <a href="javascript:;;" @click="toggleForm">Sign in</a>
-          </span>
-          <span v-if="!isSignUp">
-            New to ikismail?
-            <a href="javascript:;;" @click="toggleForm">Create an Account</a>
+          <span v-if="isSignUp">Already a member?<a href="javascript:;;" @click="toggleForm">Sign in</a></span>
+          <span v-if="!isSignUp">New in Shoploc?<a href="javascript:;;" @click="toggleForm">Create an Account</a>
           </span>
         </p>
       </div>
@@ -88,10 +83,10 @@ export default {
       };
 
       axios
-        .post(`${process.env.VUE_APP_BASE_URL}/login`, user)
+        .post(`${process.env.VUE_APP_BASE_URL}/user/login`, user)
         .then((response) => {
           this.showLoader = false;
-          this.ADD_LOGGED_USER(response.data[0]);
+          this.ADD_LOGGED_USER(response.data.data); 
           event.target.reset();
           this.$router.push(this.$route.query.from || "/");
         })

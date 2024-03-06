@@ -2,14 +2,14 @@
   <div class="product-details">
     <div class="container">
       <div class="row mb-3">
-        <div class="col-sm-4">
+        <div class="col-sm-5">
           <div class="product-image">
             <div class="view hm-zoom z-depth-2" style="cursor: pointer">
               <img
-                v-bind:src="product.productImage"
-                v-bind:alt="product.productName"
+                v-bind:src="product.picture"
+                v-bind:alt="product.product_name"
                 class="img-fluid rounded"
-                style="max-height: 700px; max-width: 127.135px; margin: auto"
+                style="max-height: 700px; max-width: 430px; margin: auto"
               />
             </div>
             <div class style="margin-top: 15px">
@@ -21,7 +21,7 @@
                     <h6 class="my-0">Product Price</h6>
                   </div>
                   <span class="text-muted" style="color: crimson !important"
-                    >₹ {{ product.productPrice }}</span
+                    >Rp. {{ product.price }}</span
                   >
                 </li>
                 <li
@@ -31,7 +31,7 @@
                     <h6 class="my-0">Product Seller</h6>
                   </div>
                   <span class="text-muted" style="color: crimson !important">{{
-                    product.productSeller
+                    product.officeName
                   }}</span>
                 </li>
               </ul>
@@ -41,22 +41,22 @@
             </div>
           </div>
         </div>
-        <div class="col-sm-8">
+        <div class="col-sm-7">
           <div class="product-detail">
             <h5 class="product-head">Product Details</h5>
             <table class="table" cellspacing="0" style="max-height: 28px">
               <tbody>
                 <tr>
                   <th scope="row">Product Name</th>
-                  <td>{{ product.productName }}</td>
+                  <td>{{ product.product_name }}</td>
                 </tr>
                 <tr>
                   <th scope="row">Product Description</th>
-                  <td>{{ product.productDescription }}</td>
+                  <td>{{ product.description }}</td>
                 </tr>
                 <tr>
                   <th scope="row">Product Category</th>
-                  <td>{{ product.productCategory }}</td>
+                  <td>{{ product.category }}</td>
                 </tr>
                 <tr>
                   <th scope="row">Product Rating</th>
@@ -107,10 +107,10 @@ export default {
     };
   },
   methods: {
-    getSimilarProduct(productSeller) {
+    getSimilarProduct(category) {
       axios
-        .get(`${process.env.VUE_APP_BASE_URL}/products/similarProduct`, {
-          params: { productSeller: productSeller },
+        .get(`${process.env.VUE_APP_BASE_URL}/product/get?id=${this.$route.params.id}`, {
+          params: { category: category },
         })
         .then((response) => {
           this.similarProduct = response.data;
@@ -126,9 +126,10 @@ export default {
   },
   created() {
     axios
-      .get(`${process.env.VUE_APP_BASE_URL}/products/${this.$route.params.id}`)
+      .get(`${process.env.VUE_APP_BASE_URL}/product/get?id=${this.$route.params.id}`)
       .then((response) => {
-        this.product = response.data;
+        let product = (response && response.data.length > 0) ? response.data[0] : {};
+        this.product = product;
         const starTotal = 5;
         const starPercentage =
           (Number(this.product.productRating) / starTotal) * 100;
@@ -142,7 +143,7 @@ export default {
         ).style.width = starPercentageRounded;
 
         // Getting Similar Product
-        this.getSimilarProduct(this.product.productSeller);
+        this.getSimilarProduct(this.product.category);
       })
       .catch((error) => {
         console.log(error);

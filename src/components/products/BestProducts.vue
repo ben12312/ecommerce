@@ -34,7 +34,7 @@ export default {
     getBestProducts() {
       this.loading = true;
       axios
-        .get(`${process.env.VUE_APP_BASE_URL}/best/products`)
+        .get(`${process.env.VUE_APP_BASE_URL}/product/get`)
         .then(response => {
           this.loading = false;
           this.bestProducts = response.data;

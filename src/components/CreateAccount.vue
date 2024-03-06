@@ -60,7 +60,7 @@
       <div class="row">
         <div class="col-md mb-3">
           <input
-            type="text"
+            type="password"
             class="form-control"
             id="act-password"
             placeholder="New password"
@@ -109,9 +109,10 @@ export default {
       if (this.ValidateEmail(this.user.email) === false) {
         this.errorMessage.push("Please provide a valid Email address");
       }
+
       if (this.errorMessage.length === 0) {
         axios
-          .post(`${process.env.VUE_APP_BASE_URL}/users`, this.user)
+          .post(`${process.env.VUE_APP_BASE_URL}/user/register`, this.user)
           .then(() => {
             this.showLoader = false;
             successToaster(

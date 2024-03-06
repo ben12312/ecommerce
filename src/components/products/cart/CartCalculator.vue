@@ -13,16 +13,16 @@
         :key="index"
       >
         <div>
-          <h6 class="my-0">{{ product.productName }}</h6>
+          <h6 class="my-0">{{ product.product_name }}</h6>
         </div>
         <span class="text-muted" style="width: 120px"
-          >₹ {{ product.productPrice }}</span
+          >Rp. {{ product.price }}</span
         >
       </li>
       <hr />
       <li class="list-group-item d-flex justify-content-between">
-        <span>Total (INR)</span>
-        <strong>₹ {{ totalValue.toFixed(2) }}</strong>
+        <span>Total (IDR)</span>
+        <strong>Rp. {{ totalValue.toFixed(2) }}</strong>
       </li>
     </ul>
   </div>
@@ -41,7 +41,7 @@ export default {
     calulateTotalPrice() {
       this.totalValue = 0;
       this.cartProducts.forEach((product) => {
-        this.totalValue += parseFloat(product.productPrice.replace(",", ""));
+        this.totalValue += parseFloat(product.price.replace(",", ""));
       });
     },
   },

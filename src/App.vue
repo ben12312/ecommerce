@@ -20,22 +20,22 @@
               <router-link to="/" class="nav-link">Home</router-link>
             </li>
             <li class="nav-item">
-              <router-link to="/products" class="nav-link"
-                >All Products</router-link
-              >
+              <router-link to="/products" class="nav-link">Semua Produk</router-link>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Pricing</a>
+              <a class="nav-link" href="#">Semua Toko</a>
             </li>
             <li class="nav-item">
-              <router-link to="/about" class="nav-link">About</router-link>
+              <router-link to="/about" class="nav-link">Hubungi Kami</router-link>
+            </li>
+            <li class="nav-item" v-if="isSeller">
+              <router-link to="/office" class="nav-link">Toko Saya</router-link>
             </li>
           </ul>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
               <router-link to="/cart" class="nav-link">
-                <i class="fa fa-shopping-cart mr-1">
-                  <span class="ml-1">{{ this.cartProducts.length }}</span>
+                <i class="fa fa-shopping-cart mr-1"><span class="ml-1">{{ this.cartProducts.length }}</span>
                 </i>
               </router-link>
             </li>
@@ -48,7 +48,7 @@
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
-                >{{ this.loggedUser.firstName }}</a
+                >{{ this.loggedUser.first_name }}</a
               >
               <div
                 class="dropdown-menu"
@@ -57,10 +57,7 @@
                 <router-link to="/" class="dropdown-item">Profile</router-link>
                 <!-- <a class="dropdown-item" href="#">Another action</a>
                 <a class="dropdown-item" href="#">Something else here</a>-->
-                <router-link
-                  to="/"
-                  class="dropdown-item text-danger"
-                  @click.native="loc_logout"
+                <router-link to="/" class="dropdown-item text-danger" @click.native="loc_logout"
                   >Logout</router-link
                 >
               </div>
@@ -75,40 +72,18 @@
     </main>
 
     <footer class="container-fluid footer text-left mt-3">
-      <p class="mr-auto">
-        Developed by:
-        <strong>Mohammed Ismail</strong>
-      </p>
+      <p class="mr-auto"> Developed for: <strong>UKM/UMKM</strong></p>
       <div style="float: right">
-        <a href="mailto:ikismail7@gmail.com" style="margin-right: 10px">
-          <i
-            class="fa fa-envelope-open"
-            aria-hidden="true"
-            style="font-size: 20px"
-          ></i>
+        <!-- mailto:ben@gmail.com -->
+        <a href="" style="margin-right: 10px">
+          <i class="fa fa-envelope-open" aria-hidden="true" style="font-size: 20px"></i>
         </a>
-        <a
-          href="https://github.com/ikismail"
-          target="_blank"
-          style="margin-right: 10px"
-        >
-          <i
-            class="fa fa-github"
-            aria-hidden="true"
-            style="font-size: 20px"
-          ></i>
-        </a>
-        <a
-          href="https://www.linkedin.com/in/ikismail7/"
-          target="_blank"
-          style="margin-right: 10px"
-        >
-          <i
-            class="fa fa-linkedin"
-            aria-hidden="true"
-            style="font-size: 20px"
-          ></i>
-        </a>
+        <!-- <a target="_blank" style="margin-right: 10px">
+          <i class="fa fa-github" aria-hidden="true" style="font-size: 20px"></i>
+        </a> -->
+        <!-- <a target="_blank" style="margin-right: 10px">
+          <i class="fa fa-linkedin" aria-hidden="true" style="font-size: 20px"></i>
+        </a> -->
       </div>
     </footer>
   </div>
@@ -116,14 +91,12 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import {
-  isLoggedIn,
-  getLoggedInUser,
-} from "./components/shared/service/authService";
+import { isLoggedIn, getLoggedInUser } from "./components/shared/service/authService";
 export default {
   data() {
     return {
       cartValue: 0,
+      isSeller: false
     };
   },
   computed: mapState(["cartProducts", "loggedUser"]),
@@ -133,7 +106,7 @@ export default {
     ...mapMutations(["SET_CART_PRODUCTS", "ADD_LOGGED_USER"]),
 
     getLocalProducts() {
-      const products = JSON.parse(localStorage.getItem("iki-cart"));
+      const products = JSON.parse(localStorage.getItem("user-cart"));
 
       if (products) {
         this.SET_CART_PRODUCTS(products);
@@ -146,6 +119,7 @@ export default {
 
     loc_logout() {
       localStorage.removeItem("_auth");
+      localStorage.removeItem("user-cart");
       this.$router.push("/");
       location.reload();
     },
@@ -154,15 +128,14 @@ export default {
     this.getLocalProducts();
 
     const loggedUser = getLoggedInUser();
-
     this.ADD_LOGGED_USER(loggedUser);
-
+    if (loggedUser && loggedUser.seller_permission && 
+    (loggedUser.role == 'Seller' || loggedUser.role == 'Admin')) this.isSeller = true
     console.log(process.env.NODE_ENV);
     console.log(process.env.VUE_APP_BASE_URL);
   },
 };
 </script>
-
 
 <style lang="css">
 @import "../node_modules/bootstrap/dist/css/bootstrap.min.css";

@@ -12,29 +12,20 @@
               <div class="card mb-4 shadow-sm" style="height: 410px">
                 <img
                   class="card-img-top mt-2"
-                  v-bind:src="item.productImage"
+                  v-bind:src="item.picture"
                   alt="Card image cap"
-                  style="max-height: 700px; max-width: 127.135px; margin: auto"
+                  style="max-height: 700px; max-width: 145px; margin: auto"
                 />
                 <div class="card-body">
-                  <h6 class="card-text">{{ item.productName }}.</h6>
+                  <h6 class="card-text">{{ item.product_name }}</h6>
                   <div
                     class="d-flex justify-content-between align-items-center"
                   >
                     <div class="btn-group">
-                      <button
-                        type="button"
-                        class="btn btn-sm btn-outline-secondary"
-                      >
-                        View
-                      </button>
+                      <button type="button" class="btn btn-sm btn-outline-secondary" v-on:click="viewButton(item)">View</button>
                     </div>
                     <small class="text-muted footerIcons">
-                      <a
-                        href="javascript:;;"
-                        class="p-2"
-                        v-on:click="removeProductCart(item)"
-                      >
+                      <a href="javascript:;;" class="p-2" v-on:click="removeProductCart(item)">
                         <i class="fa fa-trash"></i>
                       </a>
                     </small>
@@ -64,7 +55,7 @@
         <cart-calculator ref="cartCalculator"></cart-calculator>
         <ul class="list-group mb-3">
           <router-link to="/products" class="btn btn-primary mt-2 text-white"
-            >Continue Shipping</router-link
+            >Lanjut Belanja</router-link
           >
           <router-link to="/checkout" class="btn btn-danger mt-2 text-white"
             >Checkout</router-link
@@ -90,16 +81,22 @@ export default {
     ...mapMutations(["SET_CART_PRODUCTS"]),
 
     removeProductCart(product) {
-      const products = JSON.parse(localStorage.getItem("iki-cart"));
+      const products = JSON.parse(localStorage.getItem("user-cart"));
       for (let i = 0; i < products.length; i++) {
-        if (products[i]._id === product._id) {
+        if (products[i].id === product.id) {
           products.splice(i, 1);
         }
       }
       this.SET_CART_PRODUCTS(products);
-      localStorage.setItem("iki-cart", JSON.stringify(products));
+      localStorage.setItem("user-cart", JSON.stringify(products));
       this.$refs.cartCalculator.calulateTotalPrice();
     },
+    viewButton(product) {
+      this.$router.push({
+        name: "productDetails",
+        params: { id: product.id },
+      });
+    }
   },
   mounted() {},
 };
